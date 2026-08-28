@@ -1,0 +1,2100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sampath Loka - Financial & Credential Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Tenali+Ramakrishna&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --sidebar-bg: #111827;
+      --card-bg: #1f2937;
+      --text-main: #f9fafb;
+      --text-secondary: #9ca3af;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --border-color: #374151;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      --success: #10b981;
+      --danger: #ef4444;
+      --gold: #f59e0b;
+      --vault-purple: #8b5cf6;
+      --salary-green: #059669;
+      --expense-orange: #f97316;
+      --doc-blue: #38bdf8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, #f3f4f6 50%, #0b0f19 50%);
+      color: var(--text-main);
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* LOGIN SCREEN STYLES WITH PHOTO BACKGROUND & HALF WHITE/BLACK */
+    #login-screen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+      background: linear-gradient(135deg, rgba(243, 244, 246, 0.85) 50%, rgba(11, 15, 25, 0.88) 50%), url('IMG-20260221-WA0002.jpg') center/cover no-repeat;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      overflow: hidden;
+    }
+
+    .login-bg-glow {
+      position: absolute;
+      width: 450px;
+      height: 450px;
+      background: url('IMG-20260221-WA0002.jpg') center/cover no-repeat;
+      border-radius: 50%;
+      filter: blur(50px);
+      opacity: 0.4;
+      z-index: 1;
+      animation: pulseGlow 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(0.95); opacity: 0.3; }
+      100% { transform: scale(1.1); opacity: 0.55; }
+    }
+
+    .login-card {
+      position: relative;
+      z-index: 2;
+      background: rgba(31, 41, 55, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 3rem 2.5rem;
+      border-radius: 24px;
+      border: 2px solid rgba(99, 102, 241, 0.6);
+      box-shadow: 0 0 40px rgba(99, 102, 241, 0.3), 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+      width: 100%;
+      max-width: 460px;
+      text-align: center;
+    }
+
+    .login-avatar-img {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 1.5rem auto;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--accent);
+      box-shadow: 0 0 25px rgba(99, 102, 241, 0.7);
+      background-color: #374151;
+    }
+
+    .login-card h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 0.25rem;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    .login-card .user-title-tag {
+      display: inline-block;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--gold);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .login-field {
+      margin-bottom: 1.25rem;
+      text-align: left;
+    }
+
+    .login-field label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-bottom: 0.35rem;
+    }
+
+    .login-field input {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      background: #374151;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: white;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .login-field input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .password-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-input-wrap input {
+      padding-right: 2.75rem;
+    }
+
+    .toggle-eye-btn {
+      position: absolute;
+      right: 0.75rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: linear-gradient(135deg, var(--accent), var(--vault-purple));
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .login-btn:hover { opacity: 0.9; }
+
+    .login-error {
+      color: var(--danger);
+      font-size: 0.85rem;
+      margin-top: 1rem;
+      display: none;
+      font-weight: 600;
+    }
+
+    /* MAIN APP WORKSPACE */
+    #app-container {
+      display: none;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    aside {
+      width: 270px;
+      background-color: var(--sidebar-bg);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem 1rem;
+      gap: 1.5rem;
+      overflow-y: auto;
+    }
+
+    .brand {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      padding-left: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    .nav-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      flex: 1;
+    }
+
+    .nav-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      padding-left: 0.75rem;
+      margin-bottom: 0.35rem;
+      font-weight: 700;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.8rem 0.85rem;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      border-left: 4px solid var(--accent);
+    }
+
+    .logout-btn {
+      margin-top: auto;
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .logout-btn:hover { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 2rem 2.5rem;
+      gap: 2rem;
+      background: linear-gradient(135deg, rgba(243, 244, 246, 0.9) 50%, rgba(11, 15, 25, 0.95) 50%);
+    }
+
+    .tab-content {
+      display: none;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .tab-content.active {
+      display: flex;
+    }
+
+    .welcome-header {
+      background: linear-gradient(135deg, #312e81 100%, #1e1b4b 0%);
+      color: #ffffff;
+      padding: 2.25rem 2.5rem;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .user-badge {
+      display: inline-block;
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      border: 1px solid rgba(99, 102, 241, 0.4);
+    }
+
+    .user-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #ffffff, #c7d2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ATTRACTIVE SINGLE PAGE QUOTES GRID LAYOUT */
+    .quotes-grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .quote-box {
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      border: 2px solid var(--accent);
+      border-radius: 20px;
+      padding: 1.75rem;
+      box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.15);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .quote-box:hover {
+      transform: translateY(-4px);
+      border-color: #818cf8;
+    }
+
+    .quote-box::before {
+      content: '❝';
+      position: absolute;
+      top: -10px;
+      right: 15px;
+      font-size: 5rem;
+      color: rgba(99, 102, 241, 0.08);
+      font-family: serif;
+      pointer-events: none;
+    }
+
+    .quote-box.telugu-box {
+      border-color: var(--gold);
+      box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.15);
+    }
+
+    .quote-box.telugu-box::before {
+      color: rgba(245, 158, 11, 0.08);
+    }
+
+    .quote-box.telugu-box:hover {
+      border-color: #fcd34d;
+    }
+
+    .english-quote-text {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #e0e7ff;
+      font-weight: 600;
+      font-family: 'Outfit', sans-serif;
+      margin-bottom: 1rem;
+    }
+
+    .telugu-text {
+      font-family: 'Tenali Ramakrishna', sans-serif;
+      font-size: 1.4rem;
+      line-height: 1.7;
+      color: #fef3c7;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s;
+    }
+    .metric-card:hover { transform: translateY(-3px); }
+
+    .metric-title {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .metric-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #818cf8;
+      margin-top: 0.5rem;
+    }
+
+    .table-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+
+    th {
+      background-color: rgba(17, 24, 39, 0.7);
+      font-weight: 700;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    tr:hover td { background-color: rgba(255, 255, 255, 0.02); }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #ffffff;
+    }
+
+    /* VAULT & BANNERS */
+    .vault-banner {
+      background: linear-gradient(135deg, #581c87 0%, #7e22ce 100%);
+      color: white;
+      padding: 1.75rem 2rem;
+      border-radius: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .documents-banner {
+      background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+      color: white;
+      padding: 1.75rem 2rem;
+      border-radius: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .salary-banner {
+      background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+      color: white;
+      padding: 1.75rem 2rem;
+      border-radius: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .expense-banner {
+      background: linear-gradient(135deg, #7c2d12 0%, #9a3412 100%);
+      color: white;
+      padding: 1.75rem 2rem;
+      border-radius: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .credit-card-banner {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      color: white;
+      padding: 1.75rem 2rem;
+      border-radius: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .pass-mask {
+      font-family: monospace;
+      letter-spacing: 0.1em;
+      background: #111827;
+      color: #34d399;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      display: inline-block;
+      border: 1px solid var(--border-color);
+    }
+
+    .btn {
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary { background: #374151; color: var(--text-main); }
+    .btn-secondary:hover { background: #4b5563; }
+    .btn-danger { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .btn-danger:hover { background: rgba(239, 68, 68, 0.3); }
+
+    .tag {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .tag-bank { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .tag-email { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .tag-id { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.3); }
+    .tag-app { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .tag-other { background: rgba(107, 114, 128, 0.2); color: #d1d5db; border: 1px solid rgba(107, 114, 128, 0.3); }
+    .tag-doc { background: rgba(56, 189, 248, 0.2); color: #bae6fd; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .tag-photo { background: rgba(236, 72, 153, 0.2); color: #fbcfe8; border: 1px solid rgba(236, 72, 153, 0.3); }
+
+    .search-input {
+      padding: 0.7rem 1rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: white;
+      width: 100%;
+      max-width: 320px;
+      outline: none;
+    }
+    .search-input:focus { border-color: var(--accent); }
+
+    .editable-textarea {
+      width: 100%;
+      min-height: 140px;
+      background: #111827;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem;
+      color: white;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .editable-textarea:focus { border-color: var(--accent); }
+
+    /* DOCUMENTS GRID STYLES */
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .doc-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .doc-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--doc-blue);
+    }
+
+    .doc-preview-area {
+      width: 100%;
+      height: 160px;
+      background: #111827;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      position: relative;
+    }
+
+    .doc-preview-area img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .doc-preview-placeholder {
+      font-size: 3rem;
+      color: var(--text-secondary);
+    }
+
+    .doc-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .doc-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .doc-meta {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    .doc-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+
+    /* MODALS */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(11, 15, 25, 0.8);
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      width: 100%;
+      max-width: 480px;
+      border-radius: 20px;
+      padding: 2.25rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: white;
+    }
+
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 0.4rem;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: #111827;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: white;
+      outline: none;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN OVERLAY WITH PHOTO BACKGROUND & HIGHLIGHTED CARD -->
+  <div id="login-screen">
+    <div class="login-bg-glow"></div>
+    <div class="login-card">
+      <img src="IMG-20260221-WA0002.jpg" alt="Sampath" class="login-avatar-img">
+      <h2>SAMPATH PORTAL</h2>
+      <div class="user-title-tag">Executive Portal & Vault</div>
+      <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1.5rem;">Enter credentials to unlock your workspace</p>
+      
+      <form onsubmit="handleLogin(event)">
+        <div class="login-field">
+          <label>User ID</label>
+          <input type="text" id="username" placeholder="Enter User ID" required>
+        </div>
+        <div class="login-field">
+          <label>Password</label>
+          <div class="password-input-wrap">
+            <input type="password" id="password" placeholder="Enter Password" required>
+            <button type="button" class="toggle-eye-btn" onclick="toggleLoginPasswordVisibility()">
+              <span id="login-eye-icon">👁️</span>
+            </button>
+          </div>
+        </div>
+        <button type="submit" class="login-btn">Sign In to Portal</button>
+        <div id="login-error" class="login-error">Invalid User ID or Password!</div>
+      </form>
+    </div>
+  </div>
+
+  <!-- APP CONTAINER -->
+  <div id="app-container">
+    <aside>
+      <div class="brand">✦ SAMPATH PORTAL ✦</div>
+      <div class="nav-section">
+        <div class="nav-title">Navigation Menu</div>
+        <a class="nav-item active" onclick="switchTab('motivation', this)"><span class="icon">📜</span> WELCOME</a>
+        <a class="nav-item" onclick="switchTab('dashboard', this)"><span class="icon">🏠</span> DASHBOARD & GOALS</a>
+        <a class="nav-item" onclick="switchTab('documents', this)"><span class="icon">📁</span> MY DOCUMENTS</a>
+        <a class="nav-item" onclick="switchTab('passwords', this)"><span class="icon">🔐</span> MY PASSWORDS</a>
+        <a class="nav-item" onclick="switchTab('salary', this)"><span class="icon">💰</span> SALARY DETAILS</a>
+        <a class="nav-item" onclick="switchTab('expenses', this)"><span class="icon">💳</span> MY EXPENSES</a>
+        <a class="nav-item" onclick="switchTab('creditcards', this)"><span class="icon">💳</span> CREDIT CARD</a>
+        <a class="nav-item" onclick="switchTab('notes', this)"><span class="icon">📝</span> NOTES</a>
+        <a class="nav-item" onclick="switchTab('dairy', this)"><span class="icon">📖</span> MEMORY LANE</a>
+      </div>
+      <a class="nav-item logout-btn" onclick="handleLogout()"><span class="icon">🔒</span> LOG OUT</a>
+    </aside>
+
+    <main>
+      <!-- MOTIVATION & QUOTES TAB -->
+      <div id="motivation" class="tab-content active">
+        <div class="welcome-header" style="background: linear-gradient(135deg, #4c1d95 0%, #1e1b4b 100%);">
+          <div class="user-badge">Daily Inspiration & Mindset</div>
+          <div class="user-name">WELCOME, SAMPATH LOKA</div>
+          <div>"Empowering your daily journey through wisdom, focus, and clear vision."</div>
+        </div>
+
+        <div class="quotes-grid-container">
+          <div class="quote-box">
+            <div class="english-quote-text">
+              "The future belongs to those who believe in the beauty of their dreams."
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase;">— Eleanor Roosevelt</div>
+          </div>
+          <div class="quote-box" style="border-color: #38bdf8;">
+            <div class="english-quote-text" style="color: #bae6fd;">
+              "Success is not final; failure is not fatal: It is the courage to continue that counts."
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase;">— Winston Churchill</div>
+          </div>
+          <div class="quote-box" style="border-color: #10b981;">
+            <div class="english-quote-text" style="color: #a7f3d0;">
+              "Believe you can and you're halfway there."
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase;">— Theodore Roosevelt</div>
+          </div>
+
+          <div class="quote-box telugu-box">
+            <div class="telugu-text">
+              "నువ్వు జీవితంలో నీకు ఎదురయ్యే ప్రతి ఒక్కరిని ఓ పుస్తకంలా చూడు.. చదవడం నేర్చుకో.. ఆ తర్వాత నిన్ను నువ్వు చదువుకో."
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase;">— Telugu Wisdom</div>
+          </div>
+          <div class="quote-box telugu-box" style="border-color: #ec4899;">
+            <div class="telugu-text" style="color: #fbcfe8;">
+              "కష్టాలు రాకపోతే జీవితానికి విలువ ఏముంటుంది? ప్రతి చీకటి వెనుక ఒక వెలుగు ఉండి తీరుతుంది."
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase;">— Inspiration</div>
+          </div>
+        </div>
+
+        <div class="metric-grid" style="margin-top: 1rem;">
+          <div class="metric-card" style="border-top: 3px solid var(--gold);">
+            <div class="metric-title">Daily Focus</div>
+            <div class="metric-value" style="font-size: 1.25rem; color: var(--gold); margin-top: 0.75rem;">Consistency & Growth</div>
+          </div>
+          <div class="metric-card" style="border-top: 3px solid var(--success);">
+            <div class="metric-title">Core Principle</div>
+            <div class="metric-value" style="font-size: 1.25rem; color: var(--success); margin-top: 0.75rem;">Lifelong Learning</div>
+          </div>
+          <div class="metric-card" style="border-top: 3px solid var(--accent);">
+            <div class="metric-title">Life Mission</div>
+            <div class="metric-value" style="font-size: 1.25rem; color: #818cf8; margin-top: 0.75rem;">Value Creation</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DASHBOARD TAB -->
+      <div id="dashboard" class="tab-content">
+        <div class="welcome-header">
+          <div class="user-badge">Financial Management Workspace</div>
+          <div class="user-name">SAMPATH LOKA</div>
+          <div>Portfolio Dashboard, Targets & Goals • FY 2026 – 2027</div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <h2 class="section-title" style="color: #818cf8; margin: 0;">🎯 Goals, Targets & Key Reminders</h2>
+          <button class="btn btn-primary" onclick="saveDashboardNotes()">💾 Save Changes</button>
+        </div>
+        <div class="metric-grid">
+          <div class="metric-card" style="border-top: 3px solid var(--gold);">
+            <div class="metric-title" style="margin-bottom: 0.5rem;">Savings Target & Status</div>
+            <textarea id="dash-goal-1" class="editable-textarea" style="min-height: 90px;">Savings Target (2026): ₹3,50,000
+Current: ₹2,90,337 (83% Achieved)</textarea>
+          </div>
+          <div class="metric-card" style="border-top: 3px solid var(--success);">
+            <div class="metric-title" style="margin-bottom: 0.5rem;">Monthly Expense Budget</div>
+            <textarea id="dash-goal-2" class="editable-textarea" style="min-height: 90px;">Monthly Expense Budget: ₹25,000
+Target threshold for strict control</textarea>
+          </div>
+          <div class="metric-card" style="border-top: 3px solid var(--danger);">
+            <div class="metric-title" style="margin-bottom: 0.5rem;">Active Reminders</div>
+            <textarea id="dash-goal-3" class="editable-textarea" style="min-height: 90px;">LIC Payments
+Review bills on 1st of every month</textarea>
+          </div>
+        </div>
+
+        <div class="metric-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+          <div class="metric-card" style="border-top: 3px solid var(--accent);">
+            <div class="metric-title">Total Expenses (12 Mo.)</div>
+            <div class="metric-value">₹78,260.74</div>
+          </div>
+          <div class="metric-card" style="border-top: 3px solid var(--salary-green);">
+            <div class="metric-title">Total Income (2026)</div>
+            <div class="metric-value" style="color: var(--salary-green);">₹2,37,500.00</div>
+          </div>
+          <div class="metric-card" style="border-top: 3px solid var(--success);">
+            <div class="metric-title">Total Saved (All Years)</div>
+            <div class="metric-value" style="color: var(--success);">₹2,90,337.00</div>
+          </div>
+        </div>
+
+        <h2 class="section-title" style="color: #818cf8;">📊 Annual Spend Breakdown (2026–2027)</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr><th>Category</th><th>Annual Total (₹)</th><th>Share (%)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Housing & Home</td><td>₹28,371.00</td><td>36.25%</td></tr>
+              <tr><td>Savings & Insurance</td><td>₹13,698.00</td><td>17.50%</td></tr>
+              <tr><td>Groceries</td><td>₹11,293.00</td><td>14.43%</td></tr>
+              <tr><td>Transport</td><td>₹11,222.00</td><td>14.34%</td></tr>
+              <tr><td>Travel/Trips</td><td>₹5,396.82</td><td>6.90%</td></tr>
+              <tr><td>Utilities</td><td>₹2,882.00</td><td>3.68%</td></tr>
+              <tr><td>Food & Dining</td><td>₹2,492.92</td><td>3.19%</td></tr>
+              <tr><td>Health</td><td>₹1,080.00</td><td>1.38%</td></tr>
+              <tr><td>Miscellaneous</td><td>₹621.00</td><td>0.79%</td></tr>
+              <tr><td>Personal Care</td><td>₹605.00</td><td>0.77%</td></tr>
+              <tr><td>Shopping</td><td>₹599.00</td><td>0.77%</td></tr>
+              <tr style="font-weight: 700; background: rgba(99, 102, 241, 0.1);">
+                <td>TOTAL</td><td>₹78,260.74</td><td>100.00%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- MY DOCUMENTS & PHOTOS TAB -->
+      <div id="documents" class="tab-content">
+        <div class="documents-banner">
+          <div>
+            <h2>📁 My Documents & Photos Vault</h2>
+            <p>Store, manage, preview, and download your personal documents and photos securely.</p>
+          </div>
+          <button class="btn btn-primary" style="background: white; color: var(--doc-blue);" onclick="openAddDocModal()">➕ Upload New Document / Photo</button>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+          <input type="text" id="doc-search" class="search-input" placeholder="🔍 Search documents..." oninput="filterDocuments()">
+          <span id="doc-count-badge" style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">0 Documents Stored</span>
+        </div>
+
+        <div id="docs-grid-container" class="docs-grid"></div>
+      </div>
+
+      <!-- MY PASSWORDS VAULT TAB -->
+      <div id="passwords" class="tab-content">
+        <div class="vault-banner">
+          <div>
+            <h2>🔐 Personal Credential Vault</h2>
+            <p>Private & Protected Credentials, Bank Accounts, and Government ID Records</p>
+          </div>
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="openAddModal()">➕ Add New Credential</button>
+            <button class="btn btn-secondary" onclick="toggleAllPasswords()">Show / Hide All Passwords</button>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+          <input type="text" id="vault-search" class="search-input" placeholder="🔍 Search credentials..." oninput="filterVault()">
+          <span id="vault-count-badge" style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">11 Records Vaulted</span>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Account / Service</th>
+                <th>User ID / Record Number</th>
+                <th>Password / Extra Info</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="vault-passwords-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SALARY TAB -->
+      <div id="salary" class="tab-content">
+        <div class="salary-banner">
+          <div>
+            <h2>💰 Salary & Income Tracker</h2>
+            <p>Yearly Gross Salary, Home Contribution & Sampath's Savings (June to May)</p>
+          </div>
+          <button class="btn btn-primary" style="background: white; color: var(--salary-green);" onclick="openAddYearModal()">➕ Add Year</button>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-card" style="border-top: 3px solid var(--salary-green);">
+            <div class="metric-title">Total Lifetime Gross</div>
+            <div id="salary-total-gross" class="metric-value" style="color: var(--salary-green);">₹0</div>
+          </div>
+          <div class="metric-card" style="border-top: 3px solid var(--text-secondary);">
+            <div class="metric-title">Total Contribution to Home</div>
+            <div id="salary-total-home" class="metric-value" style="color: #e5e7eb;">₹0</div>
+          </div>
+          <div class="metric-card" style="border-top: 3px solid var(--success);">
+            <div class="metric-title">Sampath's Savings</div>
+            <div id="salary-total-savings" class="metric-value" style="color: var(--success);">₹0</div>
+          </div>
+        </div>
+
+        <h2 class="section-title" style="color: var(--salary-green);">Yearly Summary</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr><th>Year (June–May)</th><th>Gross Salary (₹)</th><th>Home Share (₹)</th><th>Sampath (₹)</th><th style="text-align: right;">Actions</th></tr>
+            </thead>
+            <tbody id="salary-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- EXPENSES TAB -->
+      <div id="expenses" class="tab-content">
+        <div class="expense-banner">
+          <div>
+            <h2>💳 Expenses Tracker</h2>
+            <p>Monthly Spend Trend & Category-wise Breakdown (June 2026 – May 2027)</p>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+          <h2 class="section-title" style="color: var(--expense-orange); margin: 0;">📅 Month-wise Daily Expense Sheet</h2>
+          <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+            <select id="month-select" class="search-input" style="max-width: 220px;" onchange="renderMonthSheet()"></select>
+            <button class="btn btn-primary" style="background: var(--expense-orange);" onclick="openAddExpenseEntryModal()">➕ Add Daily Entry</button>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr><th>Description</th><th>Category</th><th>Amount (₹)</th><th style="text-align: right;">Actions</th></tr>
+            </thead>
+            <tbody id="month-sheet-tbody"></tbody>
+            <tfoot>
+              <tr style="font-weight: 700; background: rgba(249, 115, 22, 0.1);">
+                <td colspan="2">Month Total Spend</td><td id="month-sheet-total" colspan="2">₹0.00</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- CREDIT CARD TAB -->
+      <div id="creditcards" class="tab-content">
+        <div class="credit-card-banner">
+          <div>
+            <h2>💳 Credit Card Bill Tracker</h2>
+            <p>Enter and track monthly bill amounts separately for SBI, Axis, and RBL cards with total summaries.</p>
+          </div>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-card" style="border-top: 3px solid #3b82f6;">
+            <div class="metric-title">SBI Card Yearly Total</div>
+            <div id="cc-sbi-total" class="metric-value" style="font-size: 1.5rem; color: #93c5fd;">₹0.00</div>
+          </div>
+          <div class="metric-card" style="border-top: 3px solid var(--accent);">
+            <div class="metric-title">Axis Card Yearly Total</div>
+            <div id="cc-axis-total" class="metric-value" style="font-size: 1.5rem; color: #c7d2fe;">₹0.00</div>
+          </div>
+          <div class="metric-card" style="border-top: 3px solid var(--gold);">
+            <div class="metric-title">RBL Card Yearly Total</div>
+            <div id="cc-rbl-total" class="metric-value" style="font-size: 1.5rem; color: #fef3c7;">₹0.00</div>
+          </div>
+          <div class="metric-card" style="border-top: 3px solid var(--success);">
+            <div class="metric-title">Grand Total (All Banks)</div>
+            <div id="cc-grand-total" class="metric-value" style="font-size: 1.5rem; color: var(--success);">₹0.00</div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+          <h2 class="section-title" style="color: #60a5fa; margin: 0;">🏦 Monthly Bank-wise Credit Bills</h2>
+          <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+            <select id="cc-month-select" class="search-input" style="max-width: 220px;" onchange="renderCreditCardSheet()"></select>
+            <button class="btn btn-primary" onclick="openAddCCBillModal()">➕ Set/Edit Bank Bill</button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr><th>Bank Name</th><th>Month</th><th>Credit Bill Amount (₹)</th><th style="text-align: right;">Actions</th></tr>
+            </thead>
+            <tbody id="cc-month-tbody"></tbody>
+            <tfoot>
+              <tr style="font-weight: 700; background: rgba(59, 130, 246, 0.1);">
+                <td colspan="2">Total Credit Bill for Month</td><td id="cc-month-total" colspan="2">₹0.00</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <h2 class="section-title" style="color: #60a5fa; margin-top: 1rem;">📊 Annual Summary by Bank & Month</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr><th>Bank Name</th><th>Yearly Total (₹)</th></tr>
+            </thead>
+            <tbody id="cc-annual-summary-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- NOTES TAB -->
+      <div id="notes" class="tab-content">
+        <div class="welcome-header" style="background: linear-gradient(135deg, #1e3a8a 0%, #111827 100%);">
+          <div class="user-badge">Personal Scratchpad</div>
+          <div class="user-name">NOTES & IDEAS</div>
+          <div>Jot down thoughts, to-dos, or quick notes anytime. Saved securely inside this portal!</div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <h2 class="section-title" style="color: #60a5fa; margin: 0;">📝 My Personal Notes</h2>
+          <span style="font-size: 0.85rem; color: var(--success); font-weight: 600;">✓ Auto-saving to Portal Storage</span>
+        </div>
+        <div class="card" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; box-shadow: var(--shadow);">
+          <textarea id="user-notes-textarea" class="editable-textarea" style="min-height: 350px;" placeholder="Start writing your notes here..." oninput="autoSaveUserNotes()"></textarea>
+        </div>
+      </div>
+
+      <!-- DAIRY / MEMORY LANE TAB -->
+      <div id="dairy" class="tab-content">
+        <div class="welcome-header" style="background: linear-gradient(135deg, #0f766e 0%, #111827 100%);">
+          <div class="user-badge">Personal Memory Lane</div>
+          <div class="user-name">SPECIAL DATES CHRONICLES</div>
+          <div>Never forget a special day! Add your dates and their significance.</div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <h2 class="section-title" style="color: #2dd4bf; margin: 0;">📖 Special Dates & Memories</h2>
+          <button class="btn btn-primary" style="background: #0d9488;" onclick="openAddDairyModal()">➕ Add Special Date</button>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Speciality / Event Description</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="dairy-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ADD DOCUMENT / PHOTO MODAL -->
+  <div id="doc-modal" class="modal-overlay">
+    <div class="modal-card">
+      <h3 class="modal-title" style="color: var(--doc-blue);">Upload Document or Photo</h3>
+      <form onsubmit="saveDocument(event)">
+        <div class="form-group">
+          <label>Category Type</label>
+          <select id="doc-type" required>
+            <option value="Document">Official Document (PDF/Image)</option>
+            <option value="Photo">Personal Photo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Document / Photo Title</label>
+          <input type="text" id="doc-name" placeholder="e.g. PAN Card Copy, Profile Picture" required>
+        </div>
+        <div class="form-group">
+          <label>Select File (Image/PDF)</label>
+          <input type="file" id="doc-file-input" accept="image/*,application/pdf" required onchange="handleFileSelection(event)">
+        </div>
+        <input type="hidden" id="doc-file-data">
+        <input type="hidden" id="doc-file-mime">
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeAddDocModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="background: var(--doc-blue);">Save to Portal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD DAIRY ENTRY MODAL -->
+  <div id="dairy-modal" class="modal-overlay">
+    <div class="modal-card">
+      <h3 id="dairy-modal-title" class="modal-title" style="color: #2dd4bf;">Add Special Date</h3>
+      <form onsubmit="saveDairyEntry(event)">
+        <input type="hidden" id="dairy-edit-index" value="-1">
+        <div class="form-group">
+          <label>Date (e.g. 26 November 1997)</label>
+          <input type="text" id="dairy-date" placeholder="e.g. 26 November 1997" required>
+        </div>
+        <div class="form-group">
+          <label>Speciality / Event Description</label>
+          <input type="text" id="dairy-desc" placeholder="e.g. My birth day" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeDairyModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="background: #0d9488;">Save Date</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD / EDIT CREDENTIAL MODAL -->
+  <div id="cred-modal" class="modal-overlay">
+    <div class="modal-card">
+      <h3 id="modal-title-text" class="modal-title">Add New Credential</h3>
+      <form onsubmit="saveCredential(event)">
+        <input type="hidden" id="edit-index" value="-1">
+        <div class="form-group">
+          <label>Category</label>
+          <select id="cred-tag" required>
+            <option value="Bank">Bank Account / Net Banking</option>
+            <option value="Email">Email Account</option>
+            <option value="Govt ID">Government ID / Official</option>
+            <option value="App">Mobile / Web App</option>
+            <option value="Vehicle">Vehicle / Transport</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Credential / Service Name</label>
+          <input type="text" id="cred-type" placeholder="e.g. HDFC Credit Card" required>
+        </div>
+        <div class="form-group">
+          <label>User ID / Account No.</label>
+          <input type="text" id="cred-id" placeholder="e.g. sampath@gmail.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password / Extra Details</label>
+          <input type="text" id="cred-pass" placeholder="e.g. Password@123">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Credential</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD / EDIT SALARY YEAR MODAL -->
+  <div id="year-modal" class="modal-overlay">
+    <div class="modal-card">
+      <h3 id="year-modal-title" class="modal-title">Add Year</h3>
+      <form onsubmit="saveYear(event)">
+        <input type="hidden" id="year-edit-index" value="-1">
+        <div class="form-group">
+          <label>Year (e.g. 2026+ for June-May)</label>
+          <input type="text" id="year-value" placeholder="e.g. 2026+" required>
+        </div>
+        <div class="form-group">
+          <label>Gross Salary (₹)</label>
+          <input type="number" id="year-gross" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label>Home Share (₹)</label>
+          <input type="number" id="year-home" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label>Sampath Savings (₹)</label>
+          <input type="number" id="year-savings" step="0.01" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeYearModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Year</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD EXPENSE ENTRY MODAL -->
+  <div id="expense-entry-modal" class="modal-overlay">
+    <div class="modal-card">
+      <h3 class="modal-title" style="color: var(--expense-orange);">Add Expense Entry</h3>
+      <form onsubmit="saveExpenseEntry(event)">
+        <input type="hidden" id="expense-edit-index" value="-1">
+        <div class="form-group">
+          <label>Month</label>
+          <select id="expense-entry-month" required></select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" id="expense-entry-desc" placeholder="e.g. Rent" required>
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="expense-entry-category" required>
+            <option value="Housing & Home">Housing & Home</option>
+            <option value="Savings & Insurance">Savings & Insurance</option>
+            <option value="Groceries">Groceries</option>
+            <option value="Transport">Transport</option>
+            <option value="Utilities">Utilities</option>
+            <option value="Food & Dining">Food & Dining</option>
+            <option value="Travel/Trips">Travel/Trips</option>
+            <option value="Health">Health</option>
+            <option value="Personal Care">Personal Care</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Miscellaneous">Miscellaneous</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Amount (₹) or Math Expression (e.g., 9000+1000)</label>
+          <input type="text" id="expense-entry-amount" placeholder="e.g. 9000+1000" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeExpenseEntryModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="background: var(--expense-orange);">Save Entry</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD / EDIT CREDIT CARD BILL MODAL -->
+  <div id="cc-bill-modal" class="modal-overlay">
+    <div class="modal-card">
+      <h3 class="modal-title" style="color: #60a5fa;">Set Credit Card Bill</h3>
+      <form onsubmit="saveCCBillEntry(event)">
+        <div class="form-group">
+          <label>Month</label>
+          <select id="cc-modal-month" required></select>
+        </div>
+        <div class="form-group">
+          <label>Bank Name</label>
+          <select id="cc-modal-bank" required>
+            <option value="SBI Credit Card">SBI Credit Card</option>
+            <option value="Axis Card">Axis Card</option>
+            <option value="RBL Card">RBL Card</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Credit Bill Amount (₹)</label>
+          <input type="number" id="cc-modal-amount" step="0.01" placeholder="e.g. 5000" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeCCBillModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Bill</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const VALID_USER = "sampath";
+    const VALID_PASS = "0626";
+
+    const defaultVault = [
+      { tag: "Email", type: "Gmail Account (Personal)", id: "sampathloka06@gmail.com", pass: "Sam@06loka" },
+      { tag: "Email", type: "Gmail Account (Official)", id: "er.sampath2109@gmail.com", pass: "Loka@sam2109" },
+      { tag: "Bank", type: "Axis Bank Net Banking", id: "sampath0626", pass: "Sampath@1234" },
+      { tag: "Bank", type: "HDFC Bank Net Banking", id: "sampath@06", pass: "Sampath@0626" },
+      { tag: "App", type: "IRCTC Rail APP", id: "sampathloka", pass: "Sampath@81430" },
+      { tag: "Bank", type: "Axis Bank Account Number", id: "919010081785986", pass: "UTIB0000030 (IFSC)" },
+      { tag: "Bank", type: "HDFC Bank Account Number", id: "50100882064892", pass: "HDFC0009015 (IFSC)" },
+      { tag: "Vehicle", type: "Bike Number", id: "TG09E6836", pass: "—" },
+      { tag: "Govt ID", type: "PF Number", id: "101675823695", pass: "—" },
+      { tag: "Govt ID", type: "Aadhaar Number", id: "[Aadhaar Redacted]", pass: "—" },
+      { tag: "Govt ID", type: "PAN Number", id: "AQSPL0688F", pass: "—" }
+    ];
+
+    let passwordVault = JSON.parse(localStorage.getItem('sampath_vault')) || defaultVault;
+    let allVisible = false;
+
+    // DOCUMENTS VAULT STORAGE
+    const defaultDocuments = [
+      { name: "Portal Background Photo", category: "Photo", data: "IMG-20260221-WA0002.jpg", mime: "image/jpeg" }
+    ];
+    let documentsData = JSON.parse(localStorage.getItem('sampath_documents')) || defaultDocuments;
+    function saveDocumentsToStorage() { localStorage.setItem('sampath_documents', JSON.stringify(documentsData)); }
+
+    const defaultDairyData = [
+      { date: "26 November 1997", desc: "My birth day" }
+    ];
+    let dairyData = JSON.parse(localStorage.getItem('sampath_dairy')) || defaultDairyData;
+    function saveDairyToStorage() { localStorage.setItem('sampath_dairy', JSON.stringify(dairyData)); }
+
+    const defaultSalaryData = [
+      { year: "2019+", gross: 25000, home: 11500, savings: 2914 },
+      { year: "2020+", gross: 152500, home: 95000, savings: 11628 },
+      { year: "2021+", gross: 180000, home: 124000, savings: 28044 },
+      { year: "2022+", gross: 15000, home: 9000, savings: 2598 },
+      { year: "2023+", gross: 279411, home: 241000, savings: 34991 },
+      { year: "2024+", gross: 408912, home: 354000, savings: 43302 },
+      { year: "2025+", gross: 522500, home: 352000, savings: 143560 },
+      { year: "2026+", gross: 237500, home: 24000, savings: 23300 }
+    ];
+    let salaryData = JSON.parse(localStorage.getItem('sampath_salary')) || defaultSalaryData;
+
+    const monthsList = [
+      "June 2026", "July 2026", "August 2026", "September 2026", "October 2026", "November 2026",
+      "December 2026", "January 2027", "February 2027", "March 2027", "April 2027", "May 2027"
+    ];
+
+    const defaultMonthlyExpenses = {
+      "June 2026": [
+        { desc: "Rent/Mortgage", category: "Housing & Home", amount: 9000 },
+        { desc: "LIC", category: "Savings & Insurance", amount: 4566 },
+        { desc: "Current Bill (Electricity)", category: "Utilities", amount: 209 },
+        { desc: "Wi-fi Bill", category: "Utilities", amount: 471 },
+        { desc: "Mobile Recharge", category: "Utilities", amount: 229 },
+        { desc: "Home Needs", category: "Housing & Home", amount: 1071 },
+        { desc: "Groceries", category: "Groceries", amount: 4196 },
+        { desc: "Metro/Bus Travel", category: "Transport", amount: 3500 },
+        { desc: "Laundry", category: "Personal Care", amount: 330 },
+        { desc: "Petrol/Fuel", category: "Transport", amount: 700 },
+        { desc: "Snacks", category: "Food & Dining", amount: 967.92 },
+        { desc: "Online Orders", category: "Shopping", amount: 329 },
+        { desc: "Shiridi", category: "Travel/Trips", amount: 960 },
+        { desc: "Siddipet", category: "Travel/Trips", amount: 4205 },
+        { desc: "Movies / Outside Food", category: "Food & Dining", amount: 570 },
+        { desc: "Emergency/Misc", category: "Miscellaneous", amount: 171 }
+      ],
+      "July 2026": [
+        { desc: "Rent/Mortgage", category: "Housing & Home", amount: 9000 },
+        { desc: "LIC", category: "Savings & Insurance", amount: 4566 },
+        { desc: "Current Bill (Electricity)", category: "Utilities", amount: 251 },
+        { desc: "Wi-fi Bill", category: "Utilities", amount: 471 },
+        { desc: "Mobile Recharge", category: "Utilities", amount: 239 },
+        { desc: "Home Needs", category: "Housing & Home", amount: 300 },
+        { desc: "Health/ Medicine", category: "Health", amount: 650 },
+        { desc: "Groceries", category: "Groceries", amount: 3950 },
+        { desc: "Metro/Bus Travel", category: "Transport", amount: 3500 },
+        { desc: "Laundry", category: "Personal Care", amount: 275 },
+        { desc: "Petrol/Fuel", category: "Transport", amount: 500 },
+        { desc: "Snacks", category: "Food & Dining", amount: 234.82 },
+        { desc: "Online Orders", category: "Shopping", amount: 270 }
+      ],
+      "August 2026": [
+        { desc: "Rent/Mortgage", category: "Housing & Home", amount: 9000 },
+        { desc: "LIC", category: "Savings & Insurance", amount: 4566 },
+        { desc: "Utilities (Current/Wifi/Recharge)", category: "Utilities", amount: 1012 },
+        { desc: "Groceries", category: "Groceries", amount: 3902 },
+        { desc: "Transport (Metro/Petrol)", category: "Transport", amount: 3500 },
+        { desc: "Personal Care", category: "Personal Care", amount: 150 },
+        { desc: "Food & Dining", category: "Food & Dining", amount: 230 },
+        { desc: "Health / Medicine", category: "Health", amount: 430 }
+      ],
+      "September 2026": [
+        { desc: "Rent/Mortgage", category: "Housing & Home", amount: 9000 },
+        { desc: "LIC", category: "Savings & Insurance", amount: 4566 },
+        { desc: "Groceries", category: "Groceries", amount: 4000 }
+      ],
+      "October 2026": [
+        { desc: "Rent/Mortgage", category: "Housing & Home", amount: 9000 },
+        { desc: "LIC", category: "Savings & Insurance", amount: 4566 },
+        { desc: "Groceries", category: "Groceries", amount: 4000 }
+      ],
+      "November 2026": [
+        { desc: "Rent/Mortgage", category: "Housing & Home", amount: 9000 },
+        { desc: "LIC", category: "Savings & Insurance", amount: 4566 },
+        { desc: "Groceries", category: "Groceries", amount: 4000 }
+      ],
+      "December 2026": [
+        { desc: "Rent/Mortgage", category: "Housing & Home", amount: 9000 },
+        { desc: "LIC", category: "Savings & Insurance", amount: 4566 },
+        { desc: "Groceries", category: "Groceries", amount: 4000 }
+      ],
+      "January 2027": [
+        { desc: "Rent/Mortgage", category: "Housing & Home", amount: 9000 },
+        { desc: "LIC", category: "Savings & Insurance", amount: 4566 },
+        { desc: "Groceries", category: "Groceries", amount: 4000 }
+      ],
+      "February 2027": [
+        { desc: "Rent/Mortgage", category: "Housing & Home", amount: 9000 },
+        { desc: "LIC", category: "Savings & Insurance", amount: 4566 },
+        { desc: "Groceries", category: "Groceries", amount: 4000 }
+      ],
+      "March 2027": [
+        { desc: "Rent/Mortgage", category: "Housing & Home", amount: 9000 },
+        { desc: "LIC", category: "Savings & Insurance", amount: 4566 },
+        { desc: "Groceries", category: "Groceries", amount: 4000 }
+      ],
+      "April 2027": [
+        { desc: "Rent/Mortgage", category: "Housing & Home", amount: 9000 },
+        { desc: "LIC", category: "Savings & Insurance", amount: 4566 },
+        { desc: "Groceries", category: "Groceries", amount: 4000 }
+      ],
+      "May 2027": [
+        { desc: "Rent/Mortgage", category: "Housing & Home", amount: 9000 },
+        { desc: "LIC", category: "Savings & Insurance", amount: 4566 },
+        { desc: "Groceries", category: "Groceries", amount: 4000 }
+      ]
+    };
+    let monthlyExpenses = JSON.parse(localStorage.getItem('sampath_monthly_expenses')) || defaultMonthlyExpenses;
+
+    let defaultCCBills = {};
+    monthsList.forEach(m => {
+      defaultCCBills[m] = { "SBI Credit Card": 0, "Axis Card": 0, "RBL Card": 0 };
+    });
+    let creditCardBills = JSON.parse(localStorage.getItem('sampath_cc_bills')) || defaultCCBills;
+
+    let userNotes = localStorage.getItem('sampath_user_notes') || "Write your personal notes or ideas here...";
+    let dashGoal1 = localStorage.getItem('sampath_dash_goal_1') || "Savings Target (2026): ₹3,50,000\nCurrent: ₹2,90,337 (83% Achieved)";
+    let dashGoal2 = localStorage.getItem('sampath_dash_goal_2') || "Monthly Expense Budget: ₹25,000\nTarget threshold for strict control";
+    let dashGoal3 = localStorage.getItem('sampath_dash_goal_3') || "LIC Payments\nReview bills on 1st of every month";
+
+    document.getElementById('user-notes-textarea').value = userNotes;
+    document.getElementById('dash-goal-1').value = dashGoal1;
+    document.getElementById('dash-goal-2').value = dashGoal2;
+    document.getElementById('dash-goal-3').value = dashGoal3;
+
+    function saveVaultToStorage() { localStorage.setItem('sampath_vault', JSON.stringify(passwordVault)); }
+    function saveSalaryToStorage() { localStorage.setItem('sampath_salary', JSON.stringify(salaryData)); }
+    function saveMonthlyExpensesToStorage() { localStorage.setItem('sampath_monthly_expenses', JSON.stringify(monthlyExpenses)); }
+    function saveCCBillsToStorage() { localStorage.setItem('sampath_cc_bills', JSON.stringify(creditCardBills)); }
+    
+    function autoSaveUserNotes() {
+      userNotes = document.getElementById('user-notes-textarea').value;
+      localStorage.setItem('sampath_user_notes', userNotes);
+    }
+
+    function saveDashboardNotes() {
+      dashGoal1 = document.getElementById('dash-goal-1').value;
+      dashGoal2 = document.getElementById('dash-goal-2').value;
+      dashGoal3 = document.getElementById('dash-goal-3').value;
+      localStorage.setItem('sampath_dash_goal_1', dashGoal1);
+      localStorage.setItem('sampath_dash_goal_2', dashGoal2);
+      localStorage.setItem('sampath_dash_goal_3', dashGoal3);
+      alert("Dashboard goals and reminders saved successfully!");
+    }
+
+    function getTagClass(tag) {
+      switch(tag) {
+        case 'Bank': return 'tag-bank';
+        case 'Email': return 'tag-email';
+        case 'Govt ID': case 'Vehicle': return 'tag-id';
+        case 'App': return 'tag-app';
+        default: return 'tag-other';
+      }
+    }
+
+    function toggleLoginPasswordVisibility() {
+      const pwField = document.getElementById('password');
+      const icon = document.getElementById('login-eye-icon');
+      if (pwField.type === 'password') { pwField.type = 'text'; icon.innerText = '🙈'; }
+      else { pwField.type = 'password'; icon.innerText = '👁️'; }
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
+      if (user === VALID_USER && pass === VALID_PASS) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app-container').style.display = 'flex';
+        document.getElementById('login-error').style.display = 'none';
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+      }
+    }
+
+    function handleLogout() {
+      document.getElementById('app-container').style.display = 'none';
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+
+    function switchTab(tabId, element) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('aside .nav-item').forEach(item => item.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      element.classList.add('active');
+    }
+
+    // DOCUMENTS & PHOTOS LOGIC
+    function renderDocumentsGrid(dataToRender = documentsData) {
+      const container = document.getElementById('docs-grid-container');
+      container.innerHTML = '';
+      document.getElementById('doc-count-badge').innerText = `${documentsData.length} Documents Stored`;
+
+      if (dataToRender.length === 0) {
+        container.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: var(--text-secondary); padding: 2rem;">No documents or photos stored yet. Click "Upload New Document / Photo" to add.</div>`;
+        return;
+      }
+
+      dataToRender.forEach((doc, idx) => {
+        let previewHtml = '';
+        if (doc.mime && doc.mime.startsWith('image/')) {
+          previewHtml = `<img src="${doc.data}" alt="${doc.name}">`;
+        } else {
+          previewHtml = `<div class="doc-preview-placeholder">📄</div>`;
+        }
+
+        const tagClass = doc.category === 'Photo' ? 'tag-photo' : 'tag-doc';
+
+        container.innerHTML += `
+          <div class="doc-card">
+            <div class="doc-preview-area">${previewHtml}</div>
+            <div class="doc-info">
+              <span class="tag ${tagClass}" style="width: fit-content;">${doc.category}</span>
+              <div class="doc-title">${doc.name}</div>
+              <div class="doc-meta">Stored Securely in Portal</div>
+            </div>
+            <div class="doc-actions">
+              <button class="btn btn-primary" style="flex: 1; background: var(--doc-blue); justify-content: center;" onclick="downloadDocument(${idx})">⬇️ Download</button>
+              <button class="btn btn-danger" style="padding: 0.6rem;" onclick="deleteDocument(${idx})">🗑️</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function openAddDocModal() {
+      document.getElementById('doc-name').value = "";
+      document.getElementById('doc-file-input').value = "";
+      document.getElementById('doc-file-data').value = "";
+      document.getElementById('doc-file-mime').value = "";
+      document.getElementById('doc-modal').style.display = "flex";
+    }
+
+    function closeAddDocModal() { document.getElementById('doc-modal').style.display = "none"; }
+
+    function handleFileSelection(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      document.getElementById('doc-file-mime').value = file.type;
+      if (!document.getElementById('doc-name').value) {
+        document.getElementById('doc-name').value = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+      }
+      const reader = new FileReader();
+      reader.onload = function(uploadEvent) {
+        document.getElementById('doc-file-data').value = uploadEvent.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function saveDocument(e) {
+      e.preventDefault();
+      const name = document.getElementById('doc-name').value.trim();
+      const category = document.getElementById('doc-type').value;
+      const data = document.getElementById('doc-file-data').value;
+      const mime = document.getElementById('doc-file-mime').value;
+
+      if (!data) {
+        alert("Please select a valid file!");
+        return;
+      }
+
+      documentsData.push({ name, category, data, mime });
+      saveDocumentsToStorage();
+      renderDocumentsGrid();
+      closeAddDocModal();
+    }
+
+    function downloadDocument(index) {
+      const doc = documentsData[index];
+      const link = document.createElement('a');
+      link.href = doc.data;
+      link.download = doc.name;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function deleteDocument(index) {
+      if (confirm(`Are you sure you want to delete "${documentsData[index].name}"?`)) {
+        documentsData.splice(index, 1);
+        saveDocumentsToStorage();
+        renderDocumentsGrid();
+      }
+    }
+
+    function filterDocuments() {
+      const query = document.getElementById('doc-search').value.toLowerCase();
+      const filtered = documentsData.filter(d => d.name.toLowerCase().includes(query) || d.category.toLowerCase().includes(query));
+      renderDocumentsGrid(filtered);
+    }
+
+    // DAIRY LOGIC
+    function renderDairyTable() {
+      const tbody = document.getElementById('dairy-tbody');
+      tbody.innerHTML = '';
+      if (dairyData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color: var(--text-secondary);">No special dates added yet. Click "Add Special Date" to begin.</td></tr>`;
+        return;
+      }
+      dairyData.forEach((item, idx) => {
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>📅 ${item.date}</strong></td>
+            <td>${item.desc}</td>
+            <td style="text-align: right; white-space: nowrap;">
+              <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="openEditDairyModal(${idx})">✏️</button>
+              <button class="btn btn-danger" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="deleteDairyEntry(${idx})">🗑️</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function openAddDairyModal() {
+      document.getElementById('dairy-modal-title').innerText = "Add Special Date";
+      document.getElementById('dairy-edit-index').value = "-1";
+      document.getElementById('dairy-date').value = "";
+      document.getElementById('dairy-desc').value = "";
+      document.getElementById('dairy-modal').style.display = "flex";
+    }
+
+    function openEditDairyModal(index) {
+      const item = dairyData[index];
+      document.getElementById('dairy-modal-title').innerText = "Edit Special Date";
+      document.getElementById('dairy-edit-index').value = index;
+      document.getElementById('dairy-date').value = item.date;
+      document.getElementById('dairy-desc').value = item.desc;
+      document.getElementById('dairy-modal').style.display = "flex";
+    }
+
+    function closeDairyModal() { document.getElementById('dairy-modal').style.display = "none"; }
+
+    function saveDairyEntry(e) {
+      e.preventDefault();
+      const index = parseInt(document.getElementById('dairy-edit-index').value);
+      const date = document.getElementById('dairy-date').value.trim();
+      const desc = document.getElementById('dairy-desc').value.trim();
+      if (index === -1) {
+        dairyData.push({ date, desc });
+      } else {
+        dairyData[index] = { date, desc };
+      }
+      saveDairyToStorage();
+      renderDairyTable();
+      closeDairyModal();
+    }
+
+    function deleteDairyEntry(index) {
+      if (confirm(`Delete special date entry "${dairyData[index].date}"?`)) {
+        dairyData.splice(index, 1);
+        saveDairyToStorage();
+        renderDairyTable();
+      }
+    }
+
+    function renderPasswords(dataToRender = passwordVault) {
+      const vaultTbody = document.getElementById('vault-passwords-tbody');
+      vaultTbody.innerHTML = '';
+      document.getElementById('vault-count-badge').innerText = `${passwordVault.length} Records Vaulted`;
+
+      dataToRender.forEach((item, idx) => {
+        const isPassWord = item.pass && item.pass !== "—";
+        const tagClass = getTagClass(item.tag);
+        vaultTbody.innerHTML += `
+          <tr>
+            <td><span class="tag ${tagClass}">${item.tag}</span></td>
+            <td><strong>${item.type}</strong></td>
+            <td><code>${item.id}</code></td>
+            <td>${isPassWord ? `<span id="vault-pass-${idx}" class="pass-mask">${allVisible ? item.pass : '••••••••'}</span>` : `<span>${item.pass || '—'}</span>`}</td>
+            <td style="text-align: right; white-space: nowrap;">
+              ${isPassWord ? `<button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="togglePass('vault-pass-${idx}', '${item.pass}')">Show/Hide</button>` : ''}
+              <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="openEditModal(${idx})">✏️</button>
+              <button class="btn btn-danger" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="deleteCredential(${idx})">🗑️</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function togglePass(elementId, realValue) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      if (el.innerText === '••••••••') { el.innerText = realValue; el.style.background = '#374151'; }
+      else { el.innerText = '••••••••'; el.style.background = '#111827'; }
+    }
+
+    function toggleAllPasswords() { allVisible = !allVisible; renderPasswords(); }
+    function filterVault() {
+      const query = document.getElementById('vault-search').value.toLowerCase();
+      const filtered = passwordVault.filter(item => item.type.toLowerCase().includes(query) || item.id.toLowerCase().includes(query) || item.tag.toLowerCase().includes(query));
+      renderPasswords(filtered);
+    }
+
+    function openAddModal() {
+      document.getElementById('modal-title-text').innerText = "Add New Credential";
+      document.getElementById('edit-index').value = "-1";
+      document.getElementById('cred-tag').value = "Bank";
+      document.getElementById('cred-type').value = "";
+      document.getElementById('cred-id').value = "";
+      document.getElementById('cred-pass').value = "";
+      document.getElementById('cred-modal').style.display = "flex";
+    }
+
+    function openEditModal(index) {
+      const item = passwordVault[index];
+      document.getElementById('modal-title-text').innerText = "Edit Credential";
+      document.getElementById('edit-index').value = index;
+      document.getElementById('cred-tag').value = item.tag || "Other";
+      document.getElementById('cred-type').value = item.type;
+      document.getElementById('cred-id').value = item.id;
+      document.getElementById('cred-pass').value = item.pass;
+      document.getElementById('cred-modal').style.display = "flex";
+    }
+
+    function closeModal() { document.getElementById('cred-modal').style.display = "none"; }
+
+    function saveCredential(e) {
+      e.preventDefault();
+      const index = parseInt(document.getElementById('edit-index').value);
+      const tag = document.getElementById('cred-tag').value;
+      const type = document.getElementById('cred-type').value.trim();
+      const id = document.getElementById('cred-id').value.trim();
+      const pass = document.getElementById('cred-pass').value.trim() || "—";
+      if (index === -1) passwordVault.push({ tag, type, id, pass });
+      else passwordVault[index] = { tag, type, id, pass };
+      saveVaultToStorage(); renderPasswords(); closeModal();
+    }
+
+    function deleteCredential(index) {
+      if (confirm(`Delete "${passwordVault[index].type}"?`)) {
+        passwordVault.splice(index, 1);
+        saveVaultToStorage(); renderPasswords();
+      }
+    }
+
+    function formatINR(num) {
+      const n = Number(num) || 0;
+      return '₹' + n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function renderSalaryTable() {
+      const tbody = document.getElementById('salary-tbody');
+      tbody.innerHTML = '';
+      let totalGross = 0, totalHome = 0, totalSavings = 0;
+      salaryData.forEach((row, idx) => {
+        totalGross += Number(row.gross) || 0;
+        totalHome += Number(row.home) || 0;
+        totalSavings += Number(row.savings) || 0;
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${row.year}</strong></td>
+            <td>${formatINR(row.gross)}</td>
+            <td>${formatINR(row.home)}</td>
+            <td>${formatINR(row.savings)}</td>
+            <td style="text-align: right; white-space: nowrap;">
+              <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="openEditYearModal(${idx})">✏️</button>
+              <button class="btn btn-danger" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="deleteYear(${idx})">🗑️</button>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML += `
+        <tr style="font-weight: 700; background: rgba(5, 150, 105, 0.1);">
+          <td>LIFETIME TOTAL</td><td>${formatINR(totalGross)}</td><td>${formatINR(totalHome)}</td><td>${formatINR(totalSavings)}</td><td></td>
+        </tr>
+      `;
+      document.getElementById('salary-total-gross').innerText = formatINR(totalGross);
+      document.getElementById('salary-total-home').innerText = formatINR(totalHome);
+      document.getElementById('salary-total-savings').innerText = formatINR(totalSavings);
+    }
+
+    function openAddYearModal() {
+      document.getElementById('year-modal-title').innerText = "Add Year";
+      document.getElementById('year-edit-index').value = "-1";
+      document.getElementById('year-value').value = "";
+      document.getElementById('year-gross').value = "";
+      document.getElementById('year-home').value = "";
+      document.getElementById('year-savings').value = "";
+      document.getElementById('year-modal').style.display = "flex";
+    }
+
+    function openEditYearModal(index) {
+      const row = salaryData[index];
+      document.getElementById('year-modal-title').innerText = "Edit Year";
+      document.getElementById('year-edit-index').value = index;
+      document.getElementById('year-value').value = row.year;
+      document.getElementById('year-gross').value = row.gross;
+      document.getElementById('year-home').value = row.home;
+      document.getElementById('year-savings').value = row.savings;
+      document.getElementById('year-modal').style.display = "flex";
+    }
+
+    function closeYearModal() { document.getElementById('year-modal').style.display = "none"; }
+
+    function saveYear(e) {
+      e.preventDefault();
+      const index = parseInt(document.getElementById('year-edit-index').value);
+      const row = {
+        year: document.getElementById('year-value').value.trim(),
+        gross: parseFloat(document.getElementById('year-gross').value) || 0,
+        home: parseFloat(document.getElementById('year-home').value) || 0,
+        savings: parseFloat(document.getElementById('year-savings').value) || 0
+      };
+      if (index === -1) salaryData.push(row);
+      else salaryData[index] = row;
+      saveSalaryToStorage(); renderSalaryTable(); closeYearModal();
+    }
+
+    function deleteYear(index) {
+      if (confirm(`Remove year "${salaryData[index].year}"?`)) {
+        salaryData.splice(index, 1);
+        saveSalaryToStorage(); renderSalaryTable();
+      }
+    }
+
+    function populateMonthSelect() {
+      const select = document.getElementById('month-select');
+      const entrySelect = document.getElementById('expense-entry-month');
+      const ccSelect = document.getElementById('cc-month-select');
+      const ccModalMonth = document.getElementById('cc-modal-month');
+      
+      select.innerHTML = ''; entrySelect.innerHTML = ''; ccSelect.innerHTML = ''; ccModalMonth.innerHTML = '';
+      
+      Object.keys(monthlyExpenses).forEach(month => {
+        select.innerHTML += `<option value="${month}">${month}</option>`;
+        entrySelect.innerHTML += `<option value="${month}">${month}</option>`;
+      });
+
+      monthsList.forEach(month => {
+        ccSelect.innerHTML += `<option value="${month}">${month}</option>`;
+        ccModalMonth.innerHTML += `<option value="${month}">${month}</option>`;
+      });
+    }
+
+    function renderMonthSheet() {
+      const selectedMonth = document.getElementById('month-select').value;
+      const tbody = document.getElementById('month-sheet-tbody');
+      tbody.innerHTML = '';
+      const entries = monthlyExpenses[selectedMonth] || [];
+      let total = 0;
+
+      if (entries.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color: var(--text-secondary);">No entries for ${selectedMonth} yet. Click "Add Daily Entry" to record expenses.</td></tr>`;
+      }
+
+      entries.forEach((entry, idx) => {
+        total += Number(entry.amount) || 0;
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${entry.desc}</strong></td>
+            <td><span class="tag tag-other">${entry.category}</span></td>
+            <td>${formatINR(entry.amount)}</td>
+            <td style="text-align: right; white-space: nowrap;">
+              <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="openEditExpenseEntryModal('${selectedMonth}', ${idx})">✏️</button>
+              <button class="btn btn-danger" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="deleteExpenseEntry('${selectedMonth}', ${idx})">🗑️</button>
+            </td>
+          </tr>
+        `;
+      });
+      document.getElementById('month-sheet-total').innerText = formatINR(total);
+    }
+
+    function openAddExpenseEntryModal() {
+      document.getElementById('expense-edit-index').value = "-1";
+      document.getElementById('expense-entry-month').value = document.getElementById('month-select').value;
+      document.getElementById('expense-entry-desc').value = "";
+      document.getElementById('expense-entry-category').value = "Housing & Home";
+      document.getElementById('expense-entry-amount').value = "";
+      document.getElementById('expense-entry-modal').style.display = "flex";
+    }
+
+    function openEditExpenseEntryModal(month, idx) {
+      const entry = monthlyExpenses[month][idx];
+      document.getElementById('expense-edit-index').value = idx;
+      document.getElementById('expense-entry-month').value = month;
+      document.getElementById('expense-entry-desc').value = entry.desc;
+      document.getElementById('expense-entry-category').value = entry.category;
+      document.getElementById('expense-entry-amount').value = entry.amount;
+      document.getElementById('expense-entry-modal').style.display = "flex";
+    }
+
+    function closeExpenseEntryModal() { document.getElementById('expense-entry-modal').style.display = "none"; }
+
+    function saveExpenseEntry(e) {
+      e.preventDefault();
+      const index = parseInt(document.getElementById('expense-edit-index').value);
+      const month = document.getElementById('expense-entry-month').value;
+      const desc = document.getElementById('expense-entry-desc').value.trim();
+      const category = document.getElementById('expense-entry-category').value;
+      
+      let rawAmountInput = document.getElementById('expense-entry-amount').value.trim();
+      let calculatedAmount = 0;
+      
+      try {
+        if (/^[0-9+\-*/.\s]+$/.test(rawAmountInput)) {
+          calculatedAmount = Function('"use strict";return (' + rawAmountInput + ')')();
+        } else {
+          calculatedAmount = parseFloat(rawAmountInput) || 0;
+        }
+      } catch (err) {
+        calculatedAmount = parseFloat(rawAmountInput) || 0;
+      }
+
+      if (!monthlyExpenses[month]) monthlyExpenses[month] = [];
+      
+      if (index === -1) {
+        monthlyExpenses[month].push({ desc, category, amount: calculatedAmount });
+      } else {
+        monthlyExpenses[month][index] = { desc, category, amount: calculatedAmount };
+      }
+
+      saveMonthlyExpensesToStorage();
+      document.getElementById('month-select').value = month;
+      renderMonthSheet(); closeExpenseEntryModal();
+    }
+
+    function deleteExpenseEntry(month, idx) {
+      if (confirm(`Remove this entry from ${month}?`)) {
+        monthlyExpenses[month].splice(idx, 1);
+        saveMonthlyExpensesToStorage(); renderMonthSheet();
+      }
+    }
+
+    function renderCreditCardSheet() {
+      const selectedMonth = document.getElementById('cc-month-select').value;
+      const tbody = document.getElementById('cc-month-tbody');
+      tbody.innerHTML = '';
+      
+      const monthBills = creditCardBills[selectedMonth] || { "SBI Credit Card": 0, "Axis Card": 0, "RBL Card": 0 };
+      let monthTotal = 0;
+
+      let sbiTotalYear = 0;
+      let axisTotalYear = 0;
+      let rblTotalYear = 0;
+
+      monthsList.forEach(m => {
+        const b = creditCardBills[m] || {};
+        sbiTotalYear += Number(b["SBI Credit Card"]) || 0;
+        axisTotalYear += Number(b["Axis Card"]) || 0;
+        rblTotalYear += Number(b["RBL Card"]) || 0;
+      });
+
+      const grandTotalYear = sbiTotalYear + axisTotalYear + rblTotalYear;
+
+      document.getElementById('cc-sbi-total').innerText = formatINR(sbiTotalYear);
+      document.getElementById('cc-axis-total').innerText = formatINR(axisTotalYear);
+      document.getElementById('cc-rbl-total').innerText = formatINR(rblTotalYear);
+      document.getElementById('cc-grand-total').innerText = formatINR(grandTotalYear);
+
+      Object.keys(monthBills).forEach(bank => {
+        const amt = Number(monthBills[bank]) || 0;
+        monthTotal += amt;
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${bank}</strong></td>
+            <td>${selectedMonth}</td>
+            <td>${formatINR(amt)}</td>
+            <td style="text-align: right; white-space: nowrap;">
+              <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="openEditCCBillModal('${selectedMonth}', '${bank}', ${amt})">✏️ Edit</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      document.getElementById('cc-month-total').innerText = formatINR(monthTotal);
+
+      const summaryTbody = document.getElementById('cc-annual-summary-tbody');
+      summaryTbody.innerHTML = `
+        <tr><td><strong>SBI Credit Card</strong></td><td>${formatINR(sbiTotalYear)}</td></tr>
+        <tr><td><strong>Axis Card</strong></td><td>${formatINR(axisTotalYear)}</td></tr>
+        <tr><td><strong>RBL Card</strong></td><td>${formatINR(rblTotalYear)}</td></tr>
+        <tr style="font-weight: 700; background: rgba(59, 130, 246, 0.1);">
+          <td>TOTAL ANNUAL CREDIT BILL</td><td>${formatINR(grandTotalYear)}</td>
+        </tr>
+      `;
+    }
+
+    function openAddCCBillModal() {
+      document.getElementById('cc-modal-month').value = document.getElementById('cc-month-select').value;
+      document.getElementById('cc-modal-bank').value = "SBI Credit Card";
+      document.getElementById('cc-modal-amount').value = "";
+      document.getElementById('cc-bill-modal').style.display = "flex";
+    }
+
+    function openEditCCBillModal(month, bank, amount) {
+      document.getElementById('cc-modal-month').value = month;
+      document.getElementById('cc-modal-bank').value = bank;
+      document.getElementById('cc-modal-amount').value = amount;
+      document.getElementById('cc-bill-modal').style.display = "flex";
+    }
+
+    function closeCCBillModal() {
+      document.getElementById('cc-bill-modal').style.display = "none";
+    }
+
+    function saveCCBillEntry(e) {
+      e.preventDefault();
+      const month = document.getElementById('cc-modal-month').value;
+      const bank = document.getElementById('cc-modal-bank').value;
+      const amount = parseFloat(document.getElementById('cc-modal-amount').value) || 0;
+
+      if (!creditCardBills[month]) creditCardBills[month] = {};
+      creditCardBills[month][bank] = amount;
+
+      saveCCBillsToStorage();
+      document.getElementById('cc-month-select').value = month;
+      renderCreditCardSheet();
+      closeCCBillModal();
+    }
+
+    renderPasswords();
+    renderDocumentsGrid();
+    renderSalaryTable();
+    populateMonthSelect();
+    renderMonthSheet();
+    renderCreditCardSheet();
+    renderDairyTable();
+  </script>
+</body>
+</html>
+```[cite: 1]
