@@ -37,14 +37,16 @@
       overflow: hidden;
     }
 
-    /* LOGIN SCREEN STYLES WITH HOUSE PHOTO BACKGROUND */
+    /* LOGIN SCREEN STYLES WITH HOUSE PHOTO BACKGROUND - HALF BLACK + COLOR ACCENTS */
     #login-screen {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       width: 100vw;
-      background: linear-gradient(135deg, rgba(11, 15, 25, 0.72) 0%, rgba(11, 15, 25, 0.55) 100%), url('https://images.unsplash.com/photo-1760067537293-6b30141d6a52?fm=jpg&q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
+      background:
+        linear-gradient(120deg, rgba(5, 8, 15, 0.95) 0%, rgba(5, 8, 15, 0.75) 38%, rgba(88, 28, 135, 0.25) 55%, rgba(245, 158, 11, 0.18) 75%, rgba(5, 8, 15, 0.55) 100%),
+        url('https://images.unsplash.com/photo-1760067537293-6b30141d6a52?fm=jpg&q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
       position: fixed;
       top: 0;
       left: 0;
@@ -54,14 +56,30 @@
 
     .login-bg-glow {
       position: absolute;
-      width: 450px;
-      height: 450px;
-      background: radial-gradient(circle, rgba(245, 158, 11, 0.55) 0%, rgba(99, 102, 241, 0.35) 70%, transparent 100%);
+      top: 12%;
+      left: 8%;
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.6) 0%, rgba(236, 72, 153, 0.3) 55%, transparent 100%);
       border-radius: 50%;
-      filter: blur(50px);
-      opacity: 0.4;
+      filter: blur(60px);
+      opacity: 0.5;
       z-index: 1;
       animation: pulseGlow 6s ease-in-out infinite alternate;
+    }
+
+    .login-bg-glow-2 {
+      position: absolute;
+      bottom: 8%;
+      right: 6%;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.55) 0%, rgba(16, 185, 129, 0.3) 55%, transparent 100%);
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.45;
+      z-index: 1;
+      animation: pulseGlow 7s ease-in-out infinite alternate-reverse;
     }
 
     @keyframes pulseGlow {
@@ -761,13 +779,12 @@
   <!-- LOGIN OVERLAY WITH PHOTO BACKGROUND & HIGHLIGHTED CARD -->
   <div id="login-screen">
     <div class="login-bg-glow"></div>
+    <div class="login-bg-glow-2"></div>
     <div class="login-card">
       <img src="IMG-20260221-WA0002.jpg" alt="Sampath" class="login-avatar-img">
       <h2>SAMPATH PORTAL</h2>
-      <div class="user-title-tag">Executive Portal & Vault</div>
-      <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1.5rem;">Enter credentials to unlock your workspace</p>
       
-      <form onsubmit="handleLogin(event)">
+      <form onsubmit="handleLogin(event)" style="margin-top: 1.5rem;">
         <div class="login-field">
           <label>User ID</label>
           <input type="text" id="username" placeholder="Enter User ID" required>
