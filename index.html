@@ -2220,9 +2220,7 @@ Review bills on 1st of every month</textarea>
       document.getElementById('cc-bill-modal').style.display = "flex";
     }
 
-    function closeCCBillModal() {
-      document.getElementById('cc-bill-modal').style.display = "none";
-    }
+    function closeCCBillModal() { document.getElementById('cc-bill-modal').style.display = "none"; }
 
     function saveCCBillEntry(e) {
       e.preventDefault();
@@ -2230,7 +2228,7 @@ Review bills on 1st of every month</textarea>
       const bank = document.getElementById('cc-modal-bank').value;
       const amount = parseFloat(document.getElementById('cc-modal-amount').value) || 0;
 
-      if (!creditCardBills[month]) creditCardBills[month] = {};
+      if (!creditCardBills[month]) creditCardBills[month] = { "SBI Credit Card": 0, "Axis Card": 0, "RBL Card": 0 };
       creditCardBills[month][bank] = amount;
 
       saveCCBillsToStorage();
@@ -2239,14 +2237,15 @@ Review bills on 1st of every month</textarea>
       closeCCBillModal();
     }
 
-    renderPasswords();
-    renderDocumentsGrid();
-    renderSalaryTable();
-    populateMonthSelect();
-    renderMonthSheet();
-    renderCreditCardSheet();
-    renderDairyTable();
+    window.onload = function() {
+      renderPasswords();
+      renderDocumentsGrid();
+      renderDairyTable();
+      renderSalaryTable();
+      populateMonthSelect();
+      renderMonthSheet();
+      renderCreditCardSheet();
+    };
   </script>
 </body>
 </html>
-```[cite: 1, 3]
