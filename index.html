@@ -962,6 +962,8 @@
         <a class="nav-item" onclick="switchTab('notes', this)"><span class="icon">📝</span> NOTES</a>
         <a class="nav-item" onclick="switchTab('dairy', this)"><span class="icon">📖</span> MEMORY LANE</a>
       </div>
+      <a class="nav-item" onclick="openSyncModal()"><span class="icon">🔄</span> SYNC ACROSS DEVICES</a>
+      <div id="sync-status" style="padding: 0.25rem 1.25rem 0.5rem; font-size: 0.7rem; color: var(--text-secondary);"></div>
       <a class="nav-item logout-btn" onclick="handleLogout()"><span class="icon">🔒</span> LOG OUT</a>
     </aside>
 
@@ -1519,13 +1521,13 @@ Review bills on 1st of every month</textarea>
       { name: "Portal Background Photo", category: "Photo", data: "IMG-20260221-WA0002.jpg", mime: "image/jpeg" }
     ];
     let documentsData = JSON.parse(localStorage.getItem('sampath_documents')) || defaultDocuments;
-    function saveDocumentsToStorage() { localStorage.setItem('sampath_documents', JSON.stringify(documentsData)); }
+    function saveDocumentsToStorage() { localStorage.setItem('sampath_documents', JSON.stringify(documentsData)); scheduleCloudPush(); }
 
     const defaultDairyData = [
       { date: "26 November 1997", desc: "My birth day" }
     ];
     let dairyData = JSON.parse(localStorage.getItem('sampath_dairy')) || defaultDairyData;
-    function saveDairyToStorage() { localStorage.setItem('sampath_dairy', JSON.stringify(dairyData)); }
+    function saveDairyToStorage() { localStorage.setItem('sampath_dairy', JSON.stringify(dairyData)); scheduleCloudPush(); }
 
     const defaultSalaryData = [
       { year: "2019+", gross: 25000, home: 11500, savings: 2914 },
@@ -1652,14 +1654,15 @@ Review bills on 1st of every month</textarea>
     document.getElementById('dash-goal-2').value = dashGoal2;
     document.getElementById('dash-goal-3').value = dashGoal3;
 
-    function saveVaultToStorage() { localStorage.setItem('sampath_vault', JSON.stringify(passwordVault)); }
-    function saveSalaryToStorage() { localStorage.setItem('sampath_salary', JSON.stringify(salaryData)); }
-    function saveMonthlyExpensesToStorage() { localStorage.setItem('sampath_monthly_expenses', JSON.stringify(monthlyExpenses)); }
-    function saveCCBillsToStorage() { localStorage.setItem('sampath_cc_bills', JSON.stringify(creditCardBills)); }
+    function saveVaultToStorage() { localStorage.setItem('sampath_vault', JSON.stringify(passwordVault)); scheduleCloudPush(); }
+    function saveSalaryToStorage() { localStorage.setItem('sampath_salary', JSON.stringify(salaryData)); scheduleCloudPush(); }
+    function saveMonthlyExpensesToStorage() { localStorage.setItem('sampath_monthly_expenses', JSON.stringify(monthlyExpenses)); scheduleCloudPush(); }
+    function saveCCBillsToStorage() { localStorage.setItem('sampath_cc_bills', JSON.stringify(creditCardBills)); scheduleCloudPush(); }
     
     function autoSaveUserNotes() {
       userNotes = document.getElementById('user-notes-textarea').value;
       localStorage.setItem('sampath_user_notes', userNotes);
+      scheduleCloudPush();
     }
 
     function saveDashboardNotes() {
@@ -1669,7 +1672,161 @@ Review bills on 1st of every month</textarea>
       localStorage.setItem('sampath_dash_goal_1', dashGoal1);
       localStorage.setItem('sampath_dash_goal_2', dashGoal2);
       localStorage.setItem('sampath_dash_goal_3', dashGoal3);
+      scheduleCloudPush();
       alert("Dashboard goals and reminders saved successfully!");
+    }
+
+    /* =========================================================
+       CROSS-DEVICE SYNC ENGINE
+       Uses kvdb.io (a free, keyless key-value store) so that
+       whichever device you save data on, it gets pushed to the
+       cloud, and every device pulls the latest copy automatically.
+       If the network/service is ever unreachable, everything
+       silently falls back to the local save that already existed,
+       so the portal keeps working exactly as before.
+       ========================================================= */
+    const SYNC_API_BASE = "https://kvdb.io/";
+    const SYNC_DATA_KEY = "appstate";
+    let syncPushTimer = null;
+
+    function getSyncBucket() { return localStorage.getItem('sampath_sync_bucket') || ''; }
+
+    function updateSyncStatus(state) {
+      const el = document.getElementById('sync-status');
+      if (!el) return;
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      if (state === 'synced') el.innerText = 'Synced ✓ ' + time;
+      else if (state === 'offline') el.innerText = 'Offline – saved on this device only';
+      else if (state === 'setting-up') el.innerText = 'Setting up sync…';
+    }
+
+    async function ensureSyncBucket() {
+      if (getSyncBucket()) return;
+      updateSyncStatus('setting-up');
+      try {
+        const resp = await fetch(SYNC_API_BASE, { method: 'POST' });
+        const bucketId = (await resp.text()).trim();
+        if (bucketId && bucketId.length < 100 && !bucketId.includes('<')) {
+          localStorage.setItem('sampath_sync_bucket', bucketId);
+        }
+      } catch (err) {
+        console.warn('Cloud sync setup failed, continuing with local storage only:', err);
+      }
+    }
+
+    function maybeShowSyncCode() {
+      const bucket = getSyncBucket();
+      if (bucket && !localStorage.getItem('sampath_sync_code_shown')) {
+        localStorage.setItem('sampath_sync_code_shown', '1');
+        setTimeout(function () {
+          alert("🔄 Cross-device sync is ready!\n\nYour Sync Code:\n" + bucket +
+            "\n\nOn your OTHER device: sign in, open '🔄 SYNC ACROSS DEVICES' in the menu, and paste this exact code there. Both devices will then always show the same data.");
+        }, 500);
+      }
+    }
+
+    function openSyncModal() {
+      const current = getSyncBucket();
+      const entered = prompt(
+        "Your Sync Code links this device to your data in the cloud.\n\n" +
+        (current ? "Current Sync Code:\n" + current : "No sync code set yet.") +
+        "\n\nTo make ANOTHER device match this one, enter this same code there.\nTo pull data from a DIFFERENT device instead, paste that device's code below and press OK.\n(Leave it unchanged and press OK to just re-sync now.)",
+        current
+      );
+      if (entered === null) return;
+      const trimmed = entered.trim();
+      if (!trimmed) return;
+      if (trimmed !== current) {
+        localStorage.setItem('sampath_sync_bucket', trimmed);
+        localStorage.setItem('sampath_sync_code_shown', '1');
+      }
+      pullStateFromCloud().then(function () {
+        alert('Sync complete. Latest data loaded.');
+      });
+    }
+
+    function collectAllState() {
+      return {
+        passwordVault, documentsData, dairyData, salaryData,
+        monthlyExpenses, creditCardBills, userNotes,
+        dashGoal1, dashGoal2, dashGoal3,
+        _updatedAt: Date.now()
+      };
+    }
+
+    function applyAllState(remote) {
+      if (!remote || typeof remote !== 'object') return;
+      if (Array.isArray(remote.passwordVault)) passwordVault = remote.passwordVault;
+      if (Array.isArray(remote.documentsData)) documentsData = remote.documentsData;
+      if (Array.isArray(remote.dairyData)) dairyData = remote.dairyData;
+      if (Array.isArray(remote.salaryData)) salaryData = remote.salaryData;
+      if (remote.monthlyExpenses && typeof remote.monthlyExpenses === 'object') monthlyExpenses = remote.monthlyExpenses;
+      if (remote.creditCardBills && typeof remote.creditCardBills === 'object') creditCardBills = remote.creditCardBills;
+      if (typeof remote.userNotes === 'string') userNotes = remote.userNotes;
+      if (typeof remote.dashGoal1 === 'string') dashGoal1 = remote.dashGoal1;
+      if (typeof remote.dashGoal2 === 'string') dashGoal2 = remote.dashGoal2;
+      if (typeof remote.dashGoal3 === 'string') dashGoal3 = remote.dashGoal3;
+
+      localStorage.setItem('sampath_vault', JSON.stringify(passwordVault));
+      localStorage.setItem('sampath_documents', JSON.stringify(documentsData));
+      localStorage.setItem('sampath_dairy', JSON.stringify(dairyData));
+      localStorage.setItem('sampath_salary', JSON.stringify(salaryData));
+      localStorage.setItem('sampath_monthly_expenses', JSON.stringify(monthlyExpenses));
+      localStorage.setItem('sampath_cc_bills', JSON.stringify(creditCardBills));
+      localStorage.setItem('sampath_user_notes', userNotes);
+      localStorage.setItem('sampath_dash_goal_1', dashGoal1);
+      localStorage.setItem('sampath_dash_goal_2', dashGoal2);
+      localStorage.setItem('sampath_dash_goal_3', dashGoal3);
+
+      document.getElementById('user-notes-textarea').value = userNotes;
+      document.getElementById('dash-goal-1').value = dashGoal1;
+      document.getElementById('dash-goal-2').value = dashGoal2;
+      document.getElementById('dash-goal-3').value = dashGoal3;
+
+      renderPasswords();
+      renderDocumentsGrid();
+      renderSalaryTable();
+      populateMonthSelect();
+      renderMonthSheet();
+      renderCreditCardSheet();
+      renderDairyTable();
+    }
+
+    async function pushStateToCloud() {
+      const bucket = getSyncBucket();
+      if (!bucket) return;
+      try {
+        await fetch(SYNC_API_BASE + bucket + '/' + SYNC_DATA_KEY, {
+          method: 'PUT',
+          body: JSON.stringify(collectAllState())
+        });
+        updateSyncStatus('synced');
+      } catch (err) {
+        console.warn('Cloud sync push failed (your changes are still saved on this device):', err);
+        updateSyncStatus('offline');
+      }
+    }
+
+    function scheduleCloudPush() {
+      if (!getSyncBucket()) return;
+      clearTimeout(syncPushTimer);
+      syncPushTimer = setTimeout(pushStateToCloud, 800);
+    }
+
+    async function pullStateFromCloud() {
+      const bucket = getSyncBucket();
+      if (!bucket) return;
+      try {
+        const resp = await fetch(SYNC_API_BASE + bucket + '/' + SYNC_DATA_KEY);
+        if (resp.status === 200) {
+          const text = await resp.text();
+          if (text) applyAllState(JSON.parse(text));
+        }
+        updateSyncStatus('synced');
+      } catch (err) {
+        console.warn('Cloud sync pull failed (showing the data already saved on this device):', err);
+        updateSyncStatus('offline');
+      }
     }
 
     function getTagClass(tag) {
@@ -1697,6 +1854,7 @@ Review bills on 1st of every month</textarea>
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('app-container').style.display = 'flex';
         document.getElementById('login-error').style.display = 'none';
+        maybeShowSyncCode();
       } else {
         document.getElementById('login-error').style.display = 'block';
       }
@@ -2220,7 +2378,9 @@ Review bills on 1st of every month</textarea>
       document.getElementById('cc-bill-modal').style.display = "flex";
     }
 
-    function closeCCBillModal() { document.getElementById('cc-bill-modal').style.display = "none"; }
+    function closeCCBillModal() {
+      document.getElementById('cc-bill-modal').style.display = "none";
+    }
 
     function saveCCBillEntry(e) {
       e.preventDefault();
@@ -2228,7 +2388,7 @@ Review bills on 1st of every month</textarea>
       const bank = document.getElementById('cc-modal-bank').value;
       const amount = parseFloat(document.getElementById('cc-modal-amount').value) || 0;
 
-      if (!creditCardBills[month]) creditCardBills[month] = { "SBI Credit Card": 0, "Axis Card": 0, "RBL Card": 0 };
+      if (!creditCardBills[month]) creditCardBills[month] = {};
       creditCardBills[month][bank] = amount;
 
       saveCCBillsToStorage();
@@ -2237,15 +2397,24 @@ Review bills on 1st of every month</textarea>
       closeCCBillModal();
     }
 
-    window.onload = function() {
-      renderPasswords();
-      renderDocumentsGrid();
-      renderDairyTable();
-      renderSalaryTable();
-      populateMonthSelect();
-      renderMonthSheet();
-      renderCreditCardSheet();
-    };
+    renderPasswords();
+    renderDocumentsGrid();
+    renderSalaryTable();
+    populateMonthSelect();
+    renderMonthSheet();
+    renderCreditCardSheet();
+    renderDairyTable();
+
+    (async function initSync() {
+      await ensureSyncBucket();
+      await pullStateFromCloud();
+      // Keep checking for updates made on other devices without needing to log out/in.
+      setInterval(pullStateFromCloud, 20000);
+      document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) pullStateFromCloud();
+      });
+    })();
   </script>
 </body>
 </html>
+```[cite: 1, 3]
